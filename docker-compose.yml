@@ -1,0 +1,244 @@
+version: '3.8'
+
+services:
+  # MySQL Database cho User Service
+  mysql-user:
+    image: mysql:8.0
+    container_name: mysql-user
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: movie_sys-user_service
+      MYSQL_USER: app_user
+      MYSQL_PASSWORD: app_password
+    ports:
+      - "3307:3306"
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - mysql-user-data:/var/lib/mysql
+      - ./scripts/docker-entrypoint-initdb.d/:/docker-entrypoint-initdb.d
+    networks:
+      - microservice-network
+
+  # MySQL Database cho Movie Service
+  mysql-movie:
+    image: mysql:8.0
+    container_name: mysql-movie
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: movie_sys-movie_service
+      MYSQL_USER: app_user
+      MYSQL_PASSWORD: app_password
+    ports:
+      - "3308:3306"
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - mysql-movie-data:/var/lib/mysql
+      - ./scripts/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    networks:
+      - microservice-network
+
+  # MySQL Database cho Payment Service
+  mysql-payment:
+    image: mysql:8.0
+    container_name: mysql-payment
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: movie_sys-payment_service
+      MYSQL_USER: app_user
+      MYSQL_PASSWORD: app_password
+    ports:
+      - "3309:3306"
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - mysql-payment-data:/var/lib/mysql
+      - ./scripts/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    networks:
+      - microservice-network
+
+  # Zookeeper (cho Kafka)
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+    networks:
+      - microservice-network
+
+  # Kafka
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+    networks:
+      - microservice-network
+
+  # Kafdrop (UI cho Kafka)
+  kafdrop:
+    image: obsidiandynamics/kafdrop:latest
+    container_name: kafdrop
+    depends_on:
+      - kafka
+    ports:
+      - "9000:9000"
+    environment:
+      KAFKA_BROKERCONNECT: kafka:29092
+    networks:
+      - microservice-network
+
+  # Eureka Server
+  registry-service:
+    build: ./services/registry-service
+    container_name: registry-service
+    ports:
+      - "8761:8761"
+    networks:
+      - microservice-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8761/actuator/health"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
+
+  # API Gateway
+  api-gateway:
+    build: ./gateway
+    container_name: api-gateway
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_APPLICATION_NAME=api-gateway
+      - SERVER_PORT=8080
+      - EUREKA_CLIENT_SERVICE-URL_DEFAULTZONE=http://registry-service:8761/eureka
+    depends_on:
+      - registry-service
+    networks:
+      - microservice-network
+
+  # Auth Service
+  auth-service:
+    build: ./services/auth-service
+    container_name: auth-service
+    ports:
+      - "8099:8099"
+    depends_on:
+      - registry-service
+      - mysql-user
+      - kafka
+    networks:
+      - microservice-network
+
+  # User Service
+  user-service:
+    build: ./services/user-service
+    container_name: user-service
+    ports:
+      - "8090:8090"
+    depends_on:
+      - registry-service
+      - mysql-user
+      - kafka
+    networks:
+      - microservice-network
+
+  # Movie Service
+  movie-service:
+    build: ./services/movie-service
+    container_name: movie-service
+    ports:
+      - "8091:8091"
+    depends_on:
+      - registry-service
+      - mysql-movie
+      - kafka
+    networks:
+      - microservice-network
+
+  # Payment Service
+  payment-service:
+    build: ./services/payment-service
+    container_name: payment-service
+    ports:
+      - "8092:8092"
+    depends_on:
+      - registry-service
+      - mysql-payment
+      - kafka
+    networks:
+      - microservice-network
+
+  # Seat Availability Service
+  seat-availability-service:
+    build: ./services/seat-availability-service
+    container_name: seat-availability-service
+    ports:
+      - "8093:8093"
+    depends_on:
+      - registry-service
+      - mysql-movie
+      - kafka
+    networks:
+      - microservice-network
+
+  # Notification Service
+  notification-service:
+    build: ./services/notification-service
+    container_name: notification-service
+    ports:
+      - "8094:8094"
+    depends_on:
+      - registry-service
+      - mysql-movie
+      - kafka
+    networks:
+      - microservice-network
+
+  # Booking Service
+  booking-service:
+    build: ./services/booking-ticket-service
+    container_name: booking-service
+    ports:
+      - "8095:8095"
+    depends_on:
+      - registry-service
+      - mysql-payment
+      - kafka
+    networks:
+      - microservice-network
+
+  frontend:
+    build: ./client/frontend
+    container_name: frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api-gateway
+    environment:
+      - REACT_APP_API_URL=http://localhost:8080  # API URL khi gọi từ browser
+    networks:
+      - microservice-network
+
+networks:
+  microservice-network:
+    driver: bridge
+
+volumes:
+  mysql-user-data:
+  mysql-movie-data:
+  mysql-payment-data:

@@ -1,0 +1,63 @@
+openapi: 3.0.1
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+  - url: http://localhost:8092
+    description: Generated server url
+paths:
+  /payments/create:
+    post:
+      tags:
+        - payment-controller
+      operationId: createPaymentWithBooking
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentRequest'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PaymentResponse'
+components:
+  schemas:
+    PaymentRequest:
+      type: object
+      properties:
+        customerName:
+          type: string
+        customerEmail:
+          type: string
+        customerPhone:
+          type: string
+        seatScheduleIds:
+          type: array
+          items:
+            type: string
+        totalPrice:
+          type: number
+          format: float
+        discount:
+          type: number
+          format: float
+        finalPrice:
+          type: number
+          format: float
+    PaymentResponse:
+      type: object
+      properties:
+        orderCode:
+          type: string
+        qrCode:
+          type: string
+        paymentLinkId:
+          type: string
+        status:
+          type: string
+        message:
+          type: string

@@ -1,0 +1,100 @@
+/* PaymentStyles.css */
+.payment-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  text-align: center;
+}
+
+.booking-info {
+  background-color: #f5f5f5;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.qr-container {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.payment-status {
+  margin: 20px 0;
+  font-size: 18px;
+}
+
+.status-pending {
+  color: #f39c12;
+}
+
+.status-completed {
+  color: #27ae60;
+}
+
+.status-failed, .status-canceled {
+  color: #e74c3c;
+}
+
+.payment-instructions {
+  background-color: #e8f4fd;
+  padding: 15px;
+  border-radius: 8px;
+  margin-top: 20px;
+}
+
+.success-container, .failed-container {
+  max-width: 600px;
+  margin: 50px auto;
+  padding: 30px;
+  text-align: center;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.success-icon, .failed-icon {
+  font-size: 80px;
+  margin-bottom: 20px;
+}
+
+.success-icon {
+  color: #27ae60;
+}
+
+.failed-icon {
+  color: #e74c3c;
+}
+
+.action-buttons {
+  margin-top: 30px;
+}
+
+.btn {
+  display: inline-block;
+  padding: 10px 20px;
+  margin: 0 10px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.btn-primary {
+  background-color: #3498db;
+  color: white;
+}
+
+.btn-secondary {
+  background-color: #95a5a6;
+  color: white;
+}
+
+.loading, .error {
+  text-align: center;
+  margin: 50px 0;
+  font-size: 18px;
+}
+
+.error {
+  color: #e74c3c;
+}

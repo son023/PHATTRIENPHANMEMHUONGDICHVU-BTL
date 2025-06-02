@@ -1,0 +1,130 @@
+openapi: 3.0.1
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+  - url: http://localhost:8094
+    description: Generated server url
+paths:
+  /notification/payment-success:
+    post:
+      tags:
+        - notification-controller
+      operationId: sendPaymentSuccessEmail
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TicketSummaryRequest'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+components:
+  schemas:
+    Movie:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        cover:
+          type: string
+        genre:
+          type: string
+        duration:
+          type: integer
+          format: int32
+        language:
+          type: string
+        director:
+          type: string
+        cast:
+          type: string
+        desc:
+          type: string
+    Room:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+    Schedule:
+      type: object
+      properties:
+        id:
+          type: string
+        start:
+          type: string
+          format: date-time
+        end:
+          type: string
+          format: date-time
+        room:
+          $ref: '#/components/schemas/Room'
+        movie:
+          $ref: '#/components/schemas/Movie'
+    Seat:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        room:
+          $ref: '#/components/schemas/Room'
+    Ticket:
+      type: object
+      properties:
+        id:
+          type: string
+        price:
+          type: number
+          format: float
+        seatScheduleId:
+          type: string
+    TicketSummaryRequest:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/User'
+        movie:
+          $ref: '#/components/schemas/Movie'
+        room:
+          $ref: '#/components/schemas/Room'
+        schedule:
+          $ref: '#/components/schemas/Schedule'
+        seats:
+          type: array
+          items:
+            $ref: '#/components/schemas/Seat'
+        tickets:
+          type: array
+          items:
+            $ref: '#/components/schemas/Ticket'
+        totalPrice:
+          type: number
+          format: float
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        username:
+          type: string
+        password:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string

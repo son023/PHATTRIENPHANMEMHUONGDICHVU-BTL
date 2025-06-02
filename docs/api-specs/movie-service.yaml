@@ -1,0 +1,214 @@
+openapi: 3.0.1
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+  - url: http://localhost:8091
+    description: Generated server url
+paths:
+  /movies/update-seat-schedules/{scheduleId}:
+    post:
+      tags:
+        - movie-controller
+      operationId: updateSeatSchedules
+      parameters:
+        - name: scheduleId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateSeatSchedulesStatusRequest'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: boolean
+  /movies/get-ticket-summary:
+    post:
+      tags:
+        - movie-controller
+      operationId: getTicketSummary
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TicketSummaryRequest'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/TicketSummaryResponse'
+  /movies/get-all-seat-schedules-by-schedule/{scheduleId}:
+    get:
+      tags:
+        - movie-controller
+      operationId: getAllSeatSchedulesBySchedule
+      parameters:
+        - name: scheduleId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SeatSchedule'
+  /movies/get-all-schedules-by-movie/{movieId}:
+    get:
+      tags:
+        - movie-controller
+      operationId: getAllSchedulesByMovie
+      parameters:
+        - name: movieId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Schedule'
+  /movies/get-all-movies:
+    get:
+      tags:
+        - movie-controller
+      operationId: getAllMovies
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Movie'
+components:
+  schemas:
+    UpdateSeatSchedulesStatusRequest:
+      type: object
+      properties:
+        seatScheduleIds:
+          type: array
+          items:
+            type: string
+        targetStatus:
+          type: string
+    TicketSummaryRequest:
+      type: object
+      properties:
+        movieId:
+          type: string
+        seatScheduleIds:
+          type: array
+          items:
+            type: string
+    Movie:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        cover:
+          type: string
+        genre:
+          type: string
+        duration:
+          type: integer
+          format: int32
+        language:
+          type: string
+        director:
+          type: string
+        cast:
+          type: string
+        desc:
+          maxLength: 5000
+          minLength: 0
+          type: string
+    Room:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+    Schedule:
+      type: object
+      properties:
+        id:
+          type: string
+        start:
+          type: string
+          format: date-time
+        end:
+          type: string
+          format: date-time
+        room:
+          $ref: '#/components/schemas/Room'
+        movie:
+          $ref: '#/components/schemas/Movie'
+    Seat:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        room:
+          $ref: '#/components/schemas/Room'
+    TicketSummaryResponse:
+      type: object
+      properties:
+        movie:
+          $ref: '#/components/schemas/Movie'
+        room:
+          $ref: '#/components/schemas/Room'
+        schedule:
+          $ref: '#/components/schemas/Schedule'
+        seats:
+          type: array
+          items:
+            $ref: '#/components/schemas/Seat'
+        totalPrice:
+          type: number
+          format: float
+    SeatSchedule:
+      type: object
+      properties:
+        id:
+          type: string
+        status:
+          type: string
+        seatHoldStartTime:
+          type: string
+          format: date-time
+        seatHoldEndTime:
+          type: string
+          format: date-time
+        seat:
+          $ref: '#/components/schemas/Seat'
+        schedule:
+          $ref: '#/components/schemas/Schedule'

@@ -1,0 +1,429 @@
+/* PaymentStyles.css */
+.mb-payment-container {
+    max-width: 1000px;  /* Tăng từ 800px lên 1000px cho rộng hơn */
+    margin: 0 auto;
+    background: linear-gradient(135deg, #3498db, #8e44ad);
+    color: white;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    padding-bottom: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+}
+
+.mb-payment-header {
+    padding: 20px 30px;
+    text-align: left;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.mb-payment-header h1 {
+    font-size: 24px;
+    margin-bottom: 15px;
+    font-weight: 500;
+}
+
+.mb-bank-info {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.mb-logo {
+    display: flex;
+    align-items: center;
+    margin-right: 15px;
+}
+
+.mb-logo img {
+    width: 50px;
+    height: 35px;
+    margin-right: 8px;
+    border-radius: 10%;
+}
+
+.mb-logo span {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.mb-bank-name {
+    text-align: left;
+}
+
+.mb-bank-name p {
+    margin: 0;
+    font-size: 14px;
+}
+
+.bank-title {
+    font-weight: 500;
+}
+
+/* Bố cục ngang */
+.mb-payment-content {
+    display: flex;
+    padding: 25px 30px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.mb-qr-section {
+    flex: 0 0 auto;
+    margin-right: 30px;
+}
+
+.qr-wrapper {
+    background-color: rgba(255, 255, 255, 0.95);
+    padding: 15px;
+    border-radius: 12px;
+    display: inline-block;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.qr-code {
+    display: block;
+}
+
+.qr-error {
+    color: #ff5252;
+    font-size: 14px;
+    text-align: center;
+    padding: 20px;
+}
+
+.mb-payment-details {
+    flex: 1;
+    padding: 0;
+}
+
+.payment-field {
+    margin-bottom: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.field-label {
+    font-size: 15px;
+    color: rgba(255, 255, 255, 0.9);
+    flex: 0 0 130px;
+}
+
+.field-value {
+    display: flex;
+    align-items: center;
+    font-weight: 500;
+    font-size: 16px;
+    flex: 1;
+    justify-content: space-between;
+}
+
+.copy-btn {
+    margin-left: 15px;
+    background-color: rgba(255, 255, 255, 0.25);
+    border: none;
+    border-radius: 5px;
+    color: white;
+    padding: 6px 12px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.copy-btn:hover {
+    background-color: rgba(255, 255, 255, 0.35);
+    transform: translateY(-1px);
+}
+
+.copy-btn:active {
+    transform: translateY(1px);
+}
+
+.payment-note {
+    font-size: 14px;
+    margin-top: 20px;
+    color: rgba(255, 255, 255, 0.9);
+    padding: 10px 15px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    border-left: 3px solid #ffeb3b;
+}
+
+.mb-payment-status {
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.1);
+    margin: 10px 30px;
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.mb-payment-status p {
+    margin: 0;
+    font-size: 16px;
+}
+
+.payment-status-indicator {
+    margin-top: 8px;
+    font-weight: 600;
+}
+
+.status-pending {
+    color: #ffeb3b;
+}
+
+.status-completed {
+    color: #4caf50;
+}
+
+.status-failed, .status-canceled {
+    color: #ff5252;
+}
+
+.loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 300px;
+}
+
+.loading-spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    border-top: 4px solid #3498db;
+    width: 30px;
+    height: 30px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 15px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.error-container {
+    padding: 20px;
+    margin: 30px;
+    background-color: #ffebee;
+    border-radius: 8px;
+    color: #c62828;
+    text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .mb-payment-container {
+        max-width: 95%;
+        margin: 15px auto;
+    }
+
+    .mb-payment-content {
+        flex-direction: column;
+        padding: 20px;
+    }
+
+    .mb-qr-section {
+        margin-right: 0;
+        margin-bottom: 25px;
+    }
+
+    .payment-field {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .field-label {
+        margin-bottom: 5px;
+        flex: none;
+    }
+
+    .field-value {
+        width: 100%;
+    }
+
+    .mb-payment-status {
+        margin: 10px 20px;
+    }
+}
+.payment-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.payment-modal {
+    width: 90%;
+    max-width: 500px;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 5px 30px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    animation: slideIn 0.3s ease-out;
+    position: relative; /* Thêm vị trí relative */
+}
+
+    .payment-modal-success {
+        border-top: 5px solid #4caf50;
+    }
+
+    .payment-modal-failed {
+        border-top: 5px solid #f44336;
+    }
+
+    .payment-modal-canceled {
+        border-top: 5px solid #ff9800;
+    }
+
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 20px;
+        background-color: #f8f9fa;
+        border-bottom: 1px solid #e9ecef;
+    }
+
+    .modal-header h2 {
+        margin: 0;
+        font-size: 22px;
+        color: #333;
+    }
+
+    .modal-close-btn {
+        background: none;
+        border: none;
+        font-size: 24px;
+        font-weight: 700;
+        color: #999;
+        cursor: pointer;
+        transition: color 0.2s;
+    }
+
+    .modal-close-btn:hover {
+        color: #333;
+    }
+
+    .modal-content {
+        padding: 25px 20px;
+        text-align: center;
+        color: #333;
+    }
+
+    .success-icon, .failed-icon, .canceled-icon {
+        font-size: 60px;
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+    }
+
+    .success-icon {
+        background-color: #4caf50;
+        color: white;
+    }
+
+    .failed-icon {
+        background-color: #f44336;
+        color: white;
+    }
+
+    .canceled-icon {
+        background-color: #ff9800;
+        color: white;
+    }
+
+    .modal-content p {
+        margin: 10px 0;
+        font-size: 16px;
+        line-height: 1.5;
+    }
+
+    .modal-action-btn {
+        background-color: #3498db;
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 4px;
+        font-size: 16px;
+        font-weight: 500;
+        margin-top: 20px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+
+    .modal-action-btn:hover {
+        background-color: #2980b9;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    @keyframes slideIn {
+        from { transform: translateY(-30px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+    }
+
+    /* Media query chỉ giữ lại phần responsive cho container và các phần tử khác */
+    @media (max-width: 768px) {
+        .mb-payment-container {
+            max-width: 95%;
+            margin: 15px auto;
+        }
+
+        .mb-payment-content {
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .mb-qr-section {
+            margin-right: 0;
+            margin-bottom: 25px;
+        }
+
+        .payment-field {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .field-label {
+            margin-bottom: 5px;
+            flex: none;
+        }
+
+        .field-value {
+            width: 100%;
+        }
+
+        .mb-payment-status {
+            margin: 10px 20px;
+        }
+
+        /* Có thể thêm style responsive đặc biệt cho modal ở đây nếu cần */
+        .payment-modal {
+            width: 95%;
+        }
+    }

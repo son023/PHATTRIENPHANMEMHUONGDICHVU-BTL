@@ -1,0 +1,35 @@
+openapi: 3.0.1
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+  - url: http://localhost:8093
+    description: Generated server url
+paths:
+  /seat-availability/check-selected-seats-available/{scheduleId}:
+    post:
+      tags:
+        - seat-availability-controller
+      operationId: checkSelectedSeatsAvailable
+      parameters:
+        - name: scheduleId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: boolean
+components: {}
